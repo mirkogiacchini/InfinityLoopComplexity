@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="editGraph.js"></script>
+    <script type="text/javascript" src="game.js"></script>
+    <script type="text/javascript" src="classicMode.js"></script>
+    <script type="text/javascript" src="darkMode.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="bootstrap-4.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="bootstrap-4.1.3/js/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+    
+    <br>
+
+    <div class="container-fluid">
+      <div class="row text-justify">
+        <div class="col-2"></div>
+        <div class="col-8">
+          <h1>Complessità di Infinity Loop</h1>
+          <p>
+          Infinity Loop è un puzzle game. Un'istanza di gioco consiste di una griglia rettangolare contenente dei <i>pezzi</i> di gioco. 
+          Ogni <i>pezzo</i> ha un certo numero di estremità. Ci sono due modalità di gioco, nella modalità classica lo scopo è ruotare i <i>pezzi</i> in modo che ogni estremità di ogni <i>pezzo</i> sia collegata all'estremità di un altro <i>pezzo</i>, mentre nella modalità dark lo scopo è ruotare i <i>pezzi</i> in modo che ogni estremità sia sconnessa da tutte le altre.
+          <br><br>
+          Data un'istanza di gioco, stabilire se esiste una soluzione è NP-Completo (per entrambe le modalità). Entrambe le riduzioni proposte sono da <i>positive planar 1-in-3 SAT</i>. In positive planar 1-in-3 SAT viene data una collezione di clausole,
+          ogni clausola contiene esattamente 3 variabili distinte e affermate. Un'istanza di positive planar 1-in-3-SAT è risolvibile se e solo se esiste un assegnamento di verità delle variabili in modo che
+          ogni clausola contenga esattamente una variabile vera. Inoltre il grafo associato alla formula è planare e può essere disegnato in maniera "rettilinea".
+          Il grafo associato alla formula è un grafo in cui c'è un nodo per ogni variabile, un nodo per ogni clausola, e c'è un arco tra un nodo clausola e un nodo variabile se e solo se la variabile occorre nella clausola.
+          <br><br>
+          Attraverso l'editor sottostante è possibile creare un grafo (che identificherà univocamente una formula di positive planar 1-in-3-SAT):
+          <ul>
+            <li> per aggiungere una clausola: cliccare su "create mode" e poi disegnare una linea orizzontale negli spazi bianchi</li>
+            <li> per aggiungere una variabile: cliccare su "create mode" e poi disegnare sulla linea centrale rossa</li>
+            <li> per aggiungere un arco variabile-clausola: cliccare su "create mode" e poi cliccare su un quadratino blu tra la variabile e la clausola (variabile e clausola devono essere già state create)</li>
+            <li> per eliminare qualcosa: cliccare su "delete mode" e cliccare poi sugli oggetti da eliminare</li>
+            <li> per settare il valore di verità di una variabile: cliccare su "Switch Truth Assignment" e poi sulla variabile di cui si vuole cambiare lo stato</li>  
+          </ul>
+          Una volta create l'istanza di positive planar 1-in-3 SAT e scelta la modalità di gioco dal menù a tendina, è possibile cliccare su "generate!" per creare un livello di infinity loop risolvibile (secondo la modalità scelta) se e solo se l'istanza creata è risolvibile 
+          (cliccando "optimize" prima di generare il livello, si potrebbe generare un livello di infinity loop equivalente ma più piccolo).
+          I pezzi di gioco possono sia essere ruotati a mano, cliccando su "rotate manually", oppure si possono ruotare automaticamente seguendo gli assegnamenti di verità dati nel grafo, con "play" 
+          o "step".<br><br>
+          NB1: Nonostante nella riduzione originale ogni clausola deve avere esattamente 3 variabili distinte, in questo tool ammettiamo anche clausole con 1 o 2 variabili (gestibili con una variante del gadget
+          clausola originale) e clausole che contengono più volte la stessa variabile (gestibili inserendo più spazio tra le uscite delle variabili), questo per non essere troppo rigidi
+          nella creazione del grafo <br>
+          NB2: rifare "generate!" anche se si cambiano solamente i valori di verità delle variabili.
+          </p>
+        </div>
+      </div>
+
+      <br><br>
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-2">  
+          <select class="form-control" id="selMode">
+            <option value="0">Classic Mode</option>
+            <option value="1">Dark Mode</option>
+          </select>  
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-6">  
+          <div class="btn-group spacedRight">
+            <button type="button" class="btn btn-primary" id="create_button" onclick="goInCreateMode()"> Create Mode </button> 
+            <button type="button" class="btn btn-primary" id="delete_button" onclick="goInDeleteMode()"> Delete Mode </button> 
+            <button type="button" class="btn btn-primary" id="select_button" onclick="goInSelectMode()"> Switch Truth Assignment </button> 
+          </div>
+          <button type="button" class="btn btn-danger spacedRight" id="clear_button" onclick="clearGraph()"> Clear </button>
+        </div>
+        <div class="col-4">
+          <button type="button" class="btn btn-success spacedRight" id="generate_button" onclick="generateLevel()"> Generate! </button>
+          <button type="button" class="btn btn-info" id="optimize_button" onclick="optimizeLevel()"> Optimize </button> 
+        </div>
+      </div>
+      <br>
+      <div id="invalidModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Invalid graph! Some clauses have zero, or more than 3, variables!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-4"></div>
+        <div class="col-4">
+          <ul class="legend">
+            <li><span class="clause"></span> Clause</li>
+            <li><span class="truevar"></span> True Variable</li>
+            <li><span class="falsevar"></span> False Variable</li>
+            <li><span class="edge"></span> Variable-Clause Edge</li>
+          </ul>  
+        </div>
+        <div class="col-4"></div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col">
+          <!--1500, 300 .... 75 * 22, 15 * 22-->
+          <canvas id="graphCanvas" width="1650" height="330" style="border:1px solid #C2C2C2">HTML5 canvas tag not supported</canvas>
+          <script> init(); </script>
+          <br><br><br>
+          <div class="btn-group spacedRight">
+            <button type="button" class="btn btn-primary" id="play_button" style="display:none"> Play </button> 
+            <button type="button" class="btn btn-primary" id="single_button" style="display:none"> Step </button> 
+            <button type="button" class="btn btn-primary" id="stop_button" style="display:none" disabled> Stop </button> 
+          </div>
+          <button type="button" class="btn btn-info" id="user_button" style="display:none"> Rotate manually </button>
+          <br><br>
+          <canvas id="infinityLoopCanvas" width="0" height="0">HTML5 canvas tag not supported</canvas>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="invisible">
+    <img id="one_img" src="imgs/one.png">
+    <img id="two_sep_img" src="imgs/two_sep.png">
+    <img id="two_adj_img" src="imgs/two_adj.png">
+    <img id="four_img" src="imgs/four.png">
+    </div>
+
+    <div id="levelcompleteModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>Level completed!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="levelfailedModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>Level failed!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

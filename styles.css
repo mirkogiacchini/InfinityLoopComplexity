@@ -1,0 +1,10 @@
+.legend { list-style: none; }
+.legend li { float: left; margin-right: 16px; margin-bottom: 12px; }
+.legend span { float: left; width: 20px; height: 20px; margin: 2px; }
+
+.legend .clause { background-color: #19DA3A; margin-right: 5px; }
+.legend .truevar { background-color: #FFAC33; margin-right: 5px; }
+.legend .falsevar { background-color: #FF0000; margin-right: 5px; }
+.legend .edge { background-color: #1E2AA0; margin-right: 5px; }
+.spacedRight { margin-right: 7px; }
+.spacedTop { margin-top: 9px; }
