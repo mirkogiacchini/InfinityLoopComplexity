@@ -229,8 +229,10 @@ function generateLevel() {
     stopSimulation();
     var wellFormed = checkGraphWellFormed();
     if(!wellFormed[0]) {
-        //alert("the graph is not well formed, there is a clause with "+wellFormed[1]+" exits");
-        $("#invalidModal").modal()
+        if(jqueryLoaded)
+            $("#invalidModal").modal();
+        else
+            alert("the graph is not well formed, there is a clause with "+wellFormed[1]+" exits");
         return false;
     }
 
@@ -500,10 +502,18 @@ function simulateStep() {
     if(!movedSomething) {
         stopSimulation();
 
-        if(levelComplete())
-            $("#levelcompleteModal").modal();
-        else
-            $("#levelfailedModal").modal();
+        if(levelComplete()) {
+            if(jqueryLoaded)
+                $("#levelcompleteModal").modal();
+            else
+                alert("Level completed!");
+        }
+        else {
+            if(jqueryLoaded)
+                $("#levelfailedModal").modal();
+            else
+                alert("Level failed!");
+        }
 
         document.getElementById("play_button").disabled = false;
         document.getElementById("single_button").disabled = false;

@@ -1,3 +1,5 @@
+var jqueryLoaded = false;
+
 const square_size_px = 22; //20 //size of square grid
 var variable_line = new Set() //contains variable blocks which are selected
 var true_var_blocks = new Set() //which variable blocks are set to true?
