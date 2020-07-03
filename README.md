@@ -1,2 +1,2 @@
 # InfinityLoopComplexity
-http://ilnpcomplete.altervista.org/
+http://infinityloopcomplexity.altervista.org/
