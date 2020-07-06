@@ -141,6 +141,9 @@ function buildPositivePlanar1in3SatGraph() {
         
         var actExitUp = 0;
         var actExitDown = 0;
+        if(exitPoints.length == 0)
+            continue;
+        
         for(var i=0; i<exitPoints.length; i++) {
             var cind = getMapMap(xOffToClauseIndex, leftmostClauseAtXOffset(exitPoints[i][0], exitPoints[i][1]), exitPoints[i][1]);
             var actExit = actExitUp;
